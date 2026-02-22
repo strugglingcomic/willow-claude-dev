@@ -8,15 +8,17 @@ A tracking and documentation repo for getting a working Willow development envir
 
 ## Hardware
 
-- **ESP32-S3-BOX-3** — Espressif's AI development kit with microphone array, speaker, and LCD display
+- **[ESP32-S3-BOX-3](https://github.com/espressif/esp-box)** — Espressif's AI development kit with microphone array, speaker, and LCD display
 
 ## Willow Components
 
-| Component | Description | Runs on |
-|-----------|-------------|---------|
-| [Willow firmware](https://github.com/toverainc/willow) | C/ESP-IDF firmware for the device | ESP32-S3-BOX-3 |
-| [WAS](https://github.com/toverainc/willow-application-server) | Device management and config UI | Docker (port 8502) |
-| [WIS](https://github.com/toverainc/willow-inference-server) | Speech recognition (Whisper), TTS | Docker (NVIDIA GPU) |
+| Component | Repo | Description |
+|-----------|------|-------------|
+| Willow firmware | [toverainc/willow](https://github.com/toverainc/willow) | C/ESP-IDF firmware for the device |
+| WAS | [toverainc/willow-application-server](https://github.com/toverainc/willow-application-server) | Device management and config UI (Docker) |
+| WIS | [toverainc/willow-inference-server](https://github.com/toverainc/willow-inference-server) | Speech recognition, TTS (Docker, GPU) |
+
+See each repo's README for current setup instructions, ports, and requirements.
 
 ## Goals
 

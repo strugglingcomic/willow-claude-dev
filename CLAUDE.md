@@ -7,43 +7,32 @@ Tracking repo for building a Willow-based voice assistant with Claude integratio
 ```
 ESP32-S3-BOX-3 (firmware)
     ↕ HTTP/WebSocket
-Willow Application Server (WAS) — device management, config (port 8502)
+Willow Application Server (WAS) — device management, config
     ↕
-Willow Inference Server (WIS) — ASR (Whisper), TTS, optional LLM (NVIDIA GPU required)
+Willow Inference Server (WIS) — ASR, TTS, optional LLM
     ↕
 Command Endpoint — where recognized speech goes for processing
 ```
 
-Claude integration point: custom command endpoint middleware that receives transcribed speech from WIS and routes to Claude API.
+Claude integration point: custom command endpoint middleware that receives transcribed speech and routes to Claude API.
 
 ## Willow Dev Workflow
 
-All commands run from the willow repo root using `./utils.sh`:
+Firmware builds use `./utils.sh` from the willow repo root. See the
+[willow README](https://github.com/toverainc/willow#readme) for current subcommands and setup steps.
 
-```bash
-# First-time setup
-./utils.sh build-docker    # Build the ESP-IDF Docker container
-./utils.sh install         # Install dependencies inside container
-./utils.sh config          # Interactive menuconfig (set WiFi, WAS URL, etc.)
+Server components (WAS, WIS) run via Docker — see their respective READMEs for docker compose instructions.
 
-# Build and flash cycle
-./utils.sh build           # Compile firmware
-./utils.sh flash           # Flash to connected ESP32-S3-BOX-3
-./utils.sh monitor         # Serial monitor for logs
-
-# Server components (separate repos)
-docker compose up          # Start WAS and/or WIS
-```
-
-## Key Repos
+## Key Repos and Docs
 
 - Firmware: https://github.com/toverainc/willow
 - WAS: https://github.com/toverainc/willow-application-server
 - WIS: https://github.com/toverainc/willow-inference-server
 - Docs: https://heywillow.io/
 
+**Always check these repos for current setup instructions, API formats, and configuration options.** This tracking repo captures our project-specific decisions and integration work, not a copy of upstream docs.
+
 ## Hardware
 
-- Board: ESP32-S3-BOX-3
+- Board: ESP32-S3-BOX-3 ([Espressif docs](https://github.com/espressif/esp-box))
 - Connection: USB-C for flashing and serial monitor
-- WIS requires NVIDIA GPU with CUDA for local inference

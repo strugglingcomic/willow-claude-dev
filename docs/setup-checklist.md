@@ -1,38 +1,43 @@
 # Setup Checklist
 
+Each component's setup instructions live in its own repo. This checklist tracks *our* progress through them.
+
 ## Prerequisites
 
 - [ ] ESP32-S3-BOX-3 hardware connected via USB-C
 - [ ] Docker installed and running
-- [ ] NVIDIA GPU + CUDA drivers (for WIS local inference)
-- [ ] `esptool.py` or ESP-IDF toolchain available
+- [ ] GPU setup verified (if running WIS locally — see [WIS repo](https://github.com/toverainc/willow-inference-server) for requirements)
 
-## Firmware Setup
+## Firmware
 
-- [ ] Clone willow repo: `git clone https://github.com/toverainc/willow.git`
-- [ ] Build Docker container: `./utils.sh build-docker`
-- [ ] Install dependencies: `./utils.sh install`
-- [ ] Configure: `./utils.sh config` (set WiFi SSID/password, WAS URL)
-- [ ] Build firmware: `./utils.sh build`
-- [ ] Flash to device: `./utils.sh flash`
-- [ ] Verify with serial monitor: `./utils.sh monitor`
+Follow the [willow repo README](https://github.com/toverainc/willow#readme) for build/flash instructions.
 
-## WAS Setup
+- [ ] Clone repo
+- [ ] Build Docker dev container
+- [ ] Configure (WiFi, server URLs)
+- [ ] Build and flash firmware
+- [ ] Verify device boots and connects (serial monitor)
 
-- [ ] Clone WAS repo: `git clone https://github.com/toverainc/willow-application-server.git`
-- [ ] Start with Docker: `docker compose up`
-- [ ] Access UI at http://localhost:8502
-- [ ] Device appears in management interface
+## WAS
 
-## WIS Setup
+Follow the [WAS repo README](https://github.com/toverainc/willow-application-server#readme).
 
-- [ ] Clone WIS repo: `git clone https://github.com/toverainc/willow-inference-server.git`
-- [ ] Verify NVIDIA GPU access in Docker (`nvidia-smi`)
-- [ ] Start with Docker: `docker compose up`
-- [ ] Test ASR endpoint with sample audio
+- [ ] Clone repo
+- [ ] Start via Docker
+- [ ] Access management UI
+- [ ] Device appears and is manageable
 
-## Integration
+## WIS
+
+Follow the [WIS repo README](https://github.com/toverainc/willow-inference-server#readme).
+
+- [ ] Clone repo
+- [ ] Verify GPU access in Docker
+- [ ] Start via Docker
+- [ ] Test speech recognition with sample audio
+
+## Integration (our custom work)
 
 - [ ] Build custom command endpoint (Python/FastAPI)
-- [ ] Configure Willow to use custom endpoint
+- [ ] Configure Willow to send commands to our endpoint
 - [ ] Test end-to-end: speak → transcribe → Claude → TTS → playback
