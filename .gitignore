@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Docker
+docker-compose.override.yml
+
+# ESP-IDF build artifacts
+build/
+sdkconfig
+sdkconfig.old
+managed_components/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+.env
+*.pem
+*.key
+credentials.*
