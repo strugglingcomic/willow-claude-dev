@@ -18,7 +18,7 @@
          │
          ▼
 ┌─────────────────────┐
-│  WIS                │
+│  WIS (CF Worker)    │
 │  ASR + TTS          │
 └────────┬────────────┘
          │ Transcribed text
@@ -32,7 +32,7 @@
 
 - **Firmware** ([repo](https://github.com/toverainc/willow)): Runs on the ESP32-S3-BOX-3. Handles wake word detection, audio capture, display, and speaker output.
 - **WAS** ([repo](https://github.com/toverainc/willow-application-server)): Docker-based device management — config UI, OTA updates. See repo README for ports and setup.
-- **WIS** ([repo](https://github.com/toverainc/willow-inference-server)): Docker-based inference — ASR (speech-to-text), TTS (text-to-speech), optional LLM. See repo README for GPU requirements.
+- **WIS** ([original repo](https://github.com/toverainc/willow-inference-server)): Originally Docker-based inference requiring a GPU. Tovera's hosted instance (`infer.tovera.io`) is dead. We replaced it with a [Cloudflare Worker](https://github.com/strugglingcomic/willow-cloudflare-wis) using Whisper (ASR) and Deepgram Aura-2 (TTS) at `willow-wis.strugglingcomic.workers.dev`. Endpoints require `?key=` auth.
 - **Command Endpoint**: The HTTP endpoint Willow sends transcribed text to. This is where our Claude integration plugs in.
 
 ## Data Flow (high-level)
@@ -45,3 +45,14 @@
 6. Audio played back through device speaker
 
 > The exact API contract for the command endpoint (request/response format) should be verified against the [Willow docs](https://heywillow.io/) and WAS/WIS source code when we reach the integration phase.
+
+## WIS Replacement Details
+
+The Cloudflare Worker translates between Willow's native format and Cloudflare Workers AI:
+
+| Direction | Willow sends | Worker does | Model |
+|---|---|---|---|
+| ASR | POST raw PCM (16kHz/16-bit/mono) with `x-audio-*` headers | Wraps PCM in WAV header, base64 encodes, calls Whisper | `@cf/openai/whisper-large-v3-turbo` |
+| TTS | GET with `?text=` query param | Calls Aura-2, returns WAV stream | `@cf/deepgram/aura-2-en` |
+
+Free tier: 10,000 neurons/day (~200 ASR + ~50 TTS requests).

@@ -2,39 +2,42 @@
 
 Each component's setup instructions live in its own repo. This checklist tracks *our* progress through them.
 
+For detailed step-by-step commands, see [setup-walkthrough.md](setup-walkthrough.md).
+
 ## Prerequisites
 
-- [ ] ESP32-S3-BOX-3 hardware connected via USB-C
-- [ ] Docker installed and running
-- [ ] GPU setup verified (if running WIS locally — see [WIS repo](https://github.com/toverainc/willow-inference-server) for requirements)
+- [x] ESP32-S3-BOX-3 hardware connected via USB-C
+- [x] Docker installed and running (via apt, not brew — see walkthrough)
+- [x] User added to `docker` group
+- [x] User added to `dialout` group (for serial port access)
+- [x] Chrome installed (required for Web Serial API)
+- [x] ~~GPU setup verified~~ — Not needed; using Cloudflare Worker instead of local WIS
 
 ## Firmware
 
-Follow the [willow repo README](https://github.com/toverainc/willow#readme) for build/flash instructions.
-
-- [ ] Clone repo
-- [ ] Build Docker dev container
-- [ ] Configure (WiFi, server URLs)
-- [ ] Build and flash firmware
+- [x] Clone repo
+- [x] Configure (WiFi, server URLs — WIS URLs updated to Cloudflare Worker)
+- [x] Flash via WAS web flasher (Chrome → http://localhost:8502 → Flash)
 - [ ] Verify device boots and connects (serial monitor)
 
 ## WAS
 
-Follow the [WAS repo README](https://github.com/toverainc/willow-application-server#readme).
-
-- [ ] Clone repo
-- [ ] Start via Docker
-- [ ] Access management UI
+- [x] Clone repo
+- [x] Start via Docker (`docker run` with `ghcr.io/heywillow/willow-application-server`)
+- [x] Access management UI at http://localhost:8502
 - [ ] Device appears and is manageable
 
-## WIS
+## WIS (Cloudflare Worker replacement)
 
-Follow the [WIS repo README](https://github.com/toverainc/willow-inference-server#readme).
+Tovera's hosted WIS (`infer.tovera.io`) is dead. No local GPU available. Replaced with a Cloudflare Worker.
+See [setup-walkthrough.md § 6](setup-walkthrough.md#6-replace-wis-with-cloudflare-worker) for details.
 
-- [ ] Clone repo
-- [ ] Verify GPU access in Docker
-- [ ] Start via Docker
-- [ ] Test speech recognition with sample audio
+- [x] Deploy Cloudflare Worker (`willow-cloudflare-wis/`)
+- [x] Set API key as Worker secret + store in `pass willow-wis/api-key`
+- [x] Update WAS config with new WIS URLs (with `?key=` param)
+- [x] Verify health endpoint responds
+- [x] Verify TTS endpoint returns valid WAV audio
+- [ ] Test ASR end-to-end with device (speak → transcribe)
 
 ## Integration (our custom work)
 
